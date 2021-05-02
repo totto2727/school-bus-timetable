@@ -6,7 +6,6 @@ import {DataGrid, GridColDef, GridValueFormatterParams} from "@material-ui/data-
 type Direction = "outward" | "homeward";
 
 type TimetableSlot = {
-    direction: string,
     start: string,
     via1: string,
     via2: string,
@@ -32,11 +31,10 @@ const valueFormatter = (params: GridValueFormatterParams) => {
     return date !== undefined ? `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}` : date;
 };
 
-const gasGetBusTimetable = "https://script.google.com/macros/s/AKfycbzpWd0epw9-o6baEuK7dliYA95BD1ZoviIriL8AJPmEZZOwXKd1KVWqNqiIycO1Hdvq/exec";
+const gasGetBusTimetable = "https://script.google.com/macros/s/AKfycbyLqwd2q-JoOBW3OIRH3oCMR0WhOKxICeBn9vMFQvRx2JE6J_TMxxyPhp6EEph6GFNA/exec";
 
 const columns: GridColDef[] = [
     {headerName: "ID", field: "id", hide: true, type: "number"},
-    {headerName: "方向", field: "direction", flex: 2,hide:true},
     {headerName: "発車", field: "start", flex: 2, valueFormatter},
     {headerName: "経由1", field: "via1", flex: 2, valueFormatter},
     {headerName: "経由2", field: "via2", flex: 2, valueFormatter},
@@ -66,8 +64,11 @@ export const BusTimetable:React.FC<{ direction: Direction, title: string }>= pro
     useEffect(() => {
         axios
             .get<GasResponse>(`${gasGetBusTimetable}?direction=${props.direction}`)
-            .then(res => setTimetable(makeTimetableItemList(res.data.values)));
-    }, [props.direction, timetable]);
+            .then(res => {
+                setTimetable(makeTimetableItemList(res.data.values));
+                console.log(JSON.stringify(res.data));
+            });
+    }, []);
 
     return (
         <div>
