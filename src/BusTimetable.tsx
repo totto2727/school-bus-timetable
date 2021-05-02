@@ -1,6 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {DataGrid, GridColDef, GridValueFormatterParams} from "@material-ui/data-grid";
+import {
+
+    Button, Dialog, Paper,
+
+
+} from "@material-ui/core";
 
 
 type Direction = "outward" | "homeward";
@@ -33,13 +39,55 @@ const valueFormatter = (params: GridValueFormatterParams) => {
 
 const gasGetBusTimetable = "https://script.google.com/macros/s/AKfycbyLqwd2q-JoOBW3OIRH3oCMR0WhOKxICeBn9vMFQvRx2JE6J_TMxxyPhp6EEph6GFNA/exec";
 
+const Remarks: React.FC<{ remarks: string }> = props => {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClickClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        props.remarks !== ""
+            ? <div>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                    備考
+                </Button>
+                <Dialog open={open} onClose={handleClickClose}>
+                    <Paper style={{
+                        whiteSpace: "pre-wrap",
+                        width: "auto",
+                        height: "auto",
+                        fontSize: "2rem",
+                        minWidth: 300,
+                        minHeight: 300,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        lineHeight:"2em"
+                    }}>{props.remarks}</Paper>
+                </Dialog>
+            </div>
+
+            : <></>
+    )
+}
+
 const columns: GridColDef[] = [
     {headerName: "ID", field: "id", hide: true, type: "number"},
-    {headerName: "発車", field: "start", flex: 2, valueFormatter},
-    {headerName: "経由1", field: "via1", flex: 2, valueFormatter},
-    {headerName: "経由2", field: "via2", flex: 2, valueFormatter},
-    {headerName: "終点", field: "goal", flex: 2, valueFormatter},
-    {headerName: "備考", field: "remarks", flex: 12}
+    {headerName: "発車", field: "start", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+    {headerName: "経由1", field: "via1", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+    {headerName: "経由2", field: "via2", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+    {headerName: "終点", field: "goal", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+    {
+        headerName: "備考",
+        field: "remarks",
+        flex: 15,
+        renderCell: params => <Remarks remarks={params.value as string}/>
+    }
 ]
 
 const stringToTime = (str: string) => str !== "" ? new Date(str) : undefined
@@ -57,8 +105,7 @@ const makeTimetableItemList: (slot: TimetableSlot[]) => TimetableItem[] = slot =
         }
     })
 
-
-export const BusTimetable:React.FC<{ direction: Direction, title: string }>= props => {
+export const BusTimetable: React.FC<{ direction: Direction, title: string }> = props => {
     const [timetable, setTimetable] = useState<TimetableItem[]>([]);
 
     useEffect(() => {
@@ -73,7 +120,7 @@ export const BusTimetable:React.FC<{ direction: Direction, title: string }>= pro
     return (
         <div>
             <h2>{props.title}</h2>
-            <DataGrid rows={timetable} columns={columns} autoPageSize autoHeight />
+            <DataGrid rows={timetable} columns={columns} autoPageSize autoHeight/>
         </div>
     )
 }
