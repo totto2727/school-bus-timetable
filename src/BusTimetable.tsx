@@ -2,8 +2,10 @@ import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {DataGrid, GridColDef, GridValueFormatterParams} from "@material-ui/data-grid";
 import {
+    Accordion, AccordionDetails, AccordionSummary,
     Button, Dialog, Paper, Typography,
 } from "@material-ui/core";
+import {ExpandMore} from "@material-ui/icons";
 
 type Direction = "outward" | "homeward";
 
@@ -51,7 +53,8 @@ const Remarks: React.FC<{ remarks: string }> = props => {
                     }}>
                         <Typography style={{
                             padding: "2rem",
-                            fontSize: "2rem", display: "flex",
+                            fontSize: "2rem",
+                            display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
                             lineHeight: "2em"
@@ -110,8 +113,14 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string }> = p
 
     return (
         <div>
-            <h2>{props.title}</h2>
-            <DataGrid rows={timetableItems} columns={columns} autoPageSize autoHeight/>
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMore/>}>
+                    <Typography>{props.title}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <DataGrid rows={timetableItems} columns={columns} autoPageSize autoHeight/>
+                </AccordionDetails>
+            </Accordion>
         </div>
     );
 }
