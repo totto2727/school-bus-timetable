@@ -9,6 +9,15 @@ import {ExpandMore} from "@material-ui/icons";
 
 type Direction = "outward" | "homeward";
 
+type BusStop="千歳駅"|"南千歳駅"|"研究実験棟"|"本部棟"
+
+type BusStops={
+    start1:BusStop,
+    start2:BusStop,
+    start3:BusStop,
+    goal:BusStop
+}
+
 type TimetableSlot = {
     start: string,
     via1: string,
@@ -69,7 +78,7 @@ const Remarks: React.FC<{ remarks: string }> = props => {
     )
 }
 
-const columns: GridColDef[] = (() => {
+const makeColumns: (busStops:BusStops)=>GridColDef[] = busStops => {
     const valueFormatter = (params: GridValueFormatterParams) => {
         const date = params.value as Date | undefined;
         return date !== undefined ? `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}` : date;
@@ -77,10 +86,10 @@ const columns: GridColDef[] = (() => {
 
     const columns: GridColDef[] = [
         {headerName: "ID", field: "id", hide: true, type: "number"},
-        {headerName: "発車", field: "start", flex: 2,valueFormatter, align: "center", headerAlign: "center"},
-        {headerName: "経由1", field: "via1", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
-        {headerName: "経由2", field: "via2", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
-        {headerName: "終点", field: "goal", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+        {headerName: `${busStops.start1}発`, field: "start", flex: 2,valueFormatter, align: "center", headerAlign: "center"},
+        {headerName: `${busStops.start2}発`, field: "via1", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+        {headerName: `${busStops.start3}発`, field: "via2", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+        {headerName: `${busStops.goal}着`, field: "goal", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
         {
             headerName: "備考",
             field: "remarks",
@@ -92,9 +101,9 @@ const columns: GridColDef[] = (() => {
     ]
 
     return columns;
-})();
+};
 
-export const BusTimetable: React.FC<{ direction: Direction, title: string }> = props => {
+export const BusTimetable: React.FC<{ direction: Direction, title: string,busStop:BusStops }> = props => {
     const [timetableItems, setTimetableItems] = useState<TimetableItem[]>([]);
 
     const slotToItem = useCallback((slot: TimetableSlot, id: number): TimetableItem => {
@@ -118,7 +127,7 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string }> = p
                     <Typography style={{fontWeight:"bold"}}>{props.title}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <DataGrid rows={timetableItems} columns={columns} autoPageSize autoHeight/>
+                    <DataGrid rows={timetableItems} columns={makeColumns(props.busStop)} autoPageSize autoHeight/>
                 </AccordionDetails>
             </Accordion>
         </div>
