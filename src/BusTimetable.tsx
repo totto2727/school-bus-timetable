@@ -3,7 +3,7 @@ import axios from "axios";
 import {DataGrid, GridColDef, GridValueFormatterParams} from "@material-ui/data-grid";
 import {
     Accordion, AccordionDetails, AccordionSummary,
-    Button, Dialog, Paper, Typography,
+    Button, Dialog, makeStyles, Paper, Typography,
 } from "@material-ui/core";
 import {ExpandMore} from "@material-ui/icons";
 
@@ -83,7 +83,13 @@ const makeColumns: (busStops:BusStops)=>GridColDef[] = busStops => {
         const date = params.value as Date | undefined;
         return date !== undefined ? `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}` : date;
     };
-    const shareSetting:GridColDef={field:"",flex: 2,valueFormatter, align: "center", headerAlign: "center",sortable:false,disableColumnMenu:true}
+    const shareSetting:GridColDef={
+        field:"",
+        flex: 2,valueFormatter,
+        align: "center",
+        headerAlign: "center",
+        sortable:false,disableColumnMenu:true,
+    }
 
     const columns: GridColDef[] = [
         {headerName: "ID", field: "id", hide: true, type: "number"},
@@ -124,7 +130,7 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string,busSto
 
     return (
         <div>
-            <Accordion>
+            <Accordion style={{minWidth:"40rem"}}>
                 <AccordionSummary expandIcon={<ExpandMore/>}>
                     <Typography style={{fontWeight:"bold"}}>{props.title}</Typography>
                 </AccordionSummary>
