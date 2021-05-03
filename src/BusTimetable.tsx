@@ -115,7 +115,7 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string }> = p
         <div>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore/>}>
-                    <Typography>{props.title}</Typography>
+                    <Typography style={{fontWeight:"bold"}}>{props.title}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <DataGrid rows={timetableItems} columns={columns} autoPageSize autoHeight/>
