@@ -66,7 +66,7 @@ const Remarks: React.FC<{ remarks: string }> = props => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            lineHeight: "2em"
+                            lineHeight: "3rem"
                         }}>
                             {props.remarks}
                         </Typography>
