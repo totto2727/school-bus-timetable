@@ -3,7 +3,7 @@ import {BusTimetable} from "./BusTimetable";
 
 function App() {
     return (
-        <div className="App">
+        <div>
             <body>
                 <BusTimetable
                     direction={"outward"}

@@ -86,16 +86,18 @@ const makeColumns: (busStops:BusStops)=>GridColDef[] = busStops => {
 
     const columns: GridColDef[] = [
         {headerName: "ID", field: "id", hide: true, type: "number"},
-        {headerName: `${busStops.start1}発`, field: "start", flex: 2,valueFormatter, align: "center", headerAlign: "center"},
-        {headerName: `${busStops.start2}発`, field: "via1", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
-        {headerName: `${busStops.start3}発`, field: "via2", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
-        {headerName: `${busStops.goal}着`, field: "goal", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+        {headerName: `${busStops.start1}発`, field: "start", flex: 2,valueFormatter, align: "center", headerAlign: "center",sortable:false,disableColumnMenu:true},
+        {headerName: `${busStops.start2}発`, field: "via1", flex: 2, valueFormatter, align: "center", headerAlign: "center",sortable:false,disableColumnMenu:true},
+        {headerName: `${busStops.start3}発`, field: "via2", flex: 2, valueFormatter, align: "center", headerAlign: "center",sortable:false,disableColumnMenu:true},
+        {headerName: `${busStops.goal}着`, field: "goal", flex: 2, valueFormatter, align: "center", headerAlign: "center",sortable:false,disableColumnMenu:true},
         {
             headerName: "備考",
             field: "remarks",
             flex: 1,
             align: "center",
             headerAlign: "center",
+            sortable:false,
+            disableColumnMenu:true,
             renderCell: params => <Remarks remarks={params.value as string}/>
         }
     ]
