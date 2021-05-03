@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/school-bus-timetable/static/css/main.3682e18e.chunk.css",
-    "main.js": "/school-bus-timetable/static/js/main.3a0088b5.chunk.js",
-    "main.js.map": "/school-bus-timetable/static/js/main.3a0088b5.chunk.js.map",
-    "runtime-main.js": "/school-bus-timetable/static/js/runtime-main.a2204987.js",
-    "runtime-main.js.map": "/school-bus-timetable/static/js/runtime-main.a2204987.js.map",
-    "static/js/2.d17dd20f.chunk.js": "/school-bus-timetable/static/js/2.d17dd20f.chunk.js",
-    "static/js/2.d17dd20f.chunk.js.map": "/school-bus-timetable/static/js/2.d17dd20f.chunk.js.map",
-    "static/js/3.9a144807.chunk.js": "/school-bus-timetable/static/js/3.9a144807.chunk.js",
-    "static/js/3.9a144807.chunk.js.map": "/school-bus-timetable/static/js/3.9a144807.chunk.js.map",
+    "main.js": "/school-bus-timetable/static/js/main.f7ae4895.chunk.js",
+    "main.js.map": "/school-bus-timetable/static/js/main.f7ae4895.chunk.js.map",
+    "runtime-main.js": "/school-bus-timetable/static/js/runtime-main.3429512e.js",
+    "runtime-main.js.map": "/school-bus-timetable/static/js/runtime-main.3429512e.js.map",
+    "static/js/2.e8725a51.chunk.js": "/school-bus-timetable/static/js/2.e8725a51.chunk.js",
+    "static/js/2.e8725a51.chunk.js.map": "/school-bus-timetable/static/js/2.e8725a51.chunk.js.map",
+    "static/js/3.9db05456.chunk.js": "/school-bus-timetable/static/js/3.9db05456.chunk.js",
+    "static/js/3.9db05456.chunk.js.map": "/school-bus-timetable/static/js/3.9db05456.chunk.js.map",
     "index.html": "/school-bus-timetable/index.html",
     "static/css/main.3682e18e.chunk.css.map": "/school-bus-timetable/static/css/main.3682e18e.chunk.css.map",
-    "static/js/2.d17dd20f.chunk.js.LICENSE.txt": "/school-bus-timetable/static/js/2.d17dd20f.chunk.js.LICENSE.txt"
+    "static/js/2.e8725a51.chunk.js.LICENSE.txt": "/school-bus-timetable/static/js/2.e8725a51.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.a2204987.js",
-    "static/js/2.d17dd20f.chunk.js",
+    "static/js/runtime-main.3429512e.js",
+    "static/js/2.e8725a51.chunk.js",
     "static/css/main.3682e18e.chunk.css",
-    "static/js/main.3a0088b5.chunk.js"
+    "static/js/main.f7ae4895.chunk.js"
   ]
 }
