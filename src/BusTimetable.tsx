@@ -74,14 +74,16 @@ const columns: GridColDef[] = (() => {
 
     const columns: GridColDef[] = [
         {headerName: "ID", field: "id", hide: true, type: "number"},
-        {headerName: "発車", field: "start", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
+        {headerName: "発車", field: "start", flex: 2,valueFormatter, align: "center", headerAlign: "center"},
         {headerName: "経由1", field: "via1", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
         {headerName: "経由2", field: "via2", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
         {headerName: "終点", field: "goal", flex: 2, valueFormatter, align: "center", headerAlign: "center"},
         {
             headerName: "備考",
             field: "remarks",
-            flex: 15,
+            flex: 1,
+            align: "center",
+            headerAlign: "center",
             renderCell: params => <Remarks remarks={params.value as string}/>
         }
     ]
@@ -90,27 +92,26 @@ const columns: GridColDef[] = (() => {
 })();
 
 export const BusTimetable: React.FC<{ direction: Direction, title: string }> = props => {
-    const [timetable, setTimetable] = useState<TimetableItem[]>([]);
+    const [timetableItems, setTimetableItems] = useState<TimetableItem[]>([]);
 
-    const makeTimetableItemList = useCallback((slot: TimetableSlot[]): TimetableItem[] => {
-        const stringToTime = (str: string) => str !== "" ? new Date(str) : undefined
-        return slot.map((v, id) => {
-            const {remarks, ...rest} = v;
+    const slotToItem = useCallback((slot: TimetableSlot, id: number): TimetableItem => {
+            const stringToTime = (str: string) => str !== "" ? new Date(str) : undefined;
+            const {remarks, ...rest} = slot;
             return Object.assign({remarks, id}, ...Object.entries(rest).map(v => ({[v[0]]: stringToTime(v[1])})));
-        })
-    }, [])
+        }
+        , [])
 
     useEffect(() => {
         axios
             .get<GasResponse>(`${gasGetBusTimetable}?direction=${props.direction}`)
-            .then(res => setTimetable(makeTimetableItemList(res.data.values)))
-            .catch(()=>alert("データを取得できません。\n再読込してください。"));
-    }, [makeTimetableItemList, props.direction]);
+            .then(res => setTimetableItems(res.data.values.map(slotToItem)))
+            .catch(() => alert("通信に失敗しました。再読込して下さい。"));
+    }, [props.direction, slotToItem]);
 
     return (
         <div>
             <h2>{props.title}</h2>
-            <DataGrid rows={timetable} columns={columns} autoPageSize autoHeight/>
+            <DataGrid rows={timetableItems} columns={columns} autoPageSize autoHeight/>
         </div>
     );
 }
