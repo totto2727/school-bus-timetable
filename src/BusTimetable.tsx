@@ -39,7 +39,7 @@ type GasResponse = {
     values: TimetableSlot[]
 }
 
-const gasGetBusTimetable = "https://script.google.com/macros/s/AKfycbxbCNJKH9kPHgdBLUyPNxzbGM6Z8O8CmelPMqejlELDCgZ8nSTWSv_dltAoMXF3g0R9/exec";
+const gasGetBusTimetable = "https://script.google.com/macros/s/AKfycbyFqCdqeo0DvFUJE8KCM3-6OzwckqNJGstPRtpppYbIu-JUmi_eUo_SkwpUmWhwlF4c/exec";
 
 const Remarks: React.FC<{ remarks: string }> = props => {
     const [open, setOpen] = useState(false);
