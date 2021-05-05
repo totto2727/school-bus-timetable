@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/school-bus-timetable/static/css/main.5d3ece46.chunk.css",
-    "main.js": "/school-bus-timetable/static/js/main.0ed94501.chunk.js",
-    "main.js.map": "/school-bus-timetable/static/js/main.0ed94501.chunk.js.map",
+    "main.js": "/school-bus-timetable/static/js/main.b0e5bbb2.chunk.js",
+    "main.js.map": "/school-bus-timetable/static/js/main.b0e5bbb2.chunk.js.map",
     "runtime-main.js": "/school-bus-timetable/static/js/runtime-main.c0c7ccf7.js",
     "runtime-main.js.map": "/school-bus-timetable/static/js/runtime-main.c0c7ccf7.js.map",
     "static/js/2.7a979c8d.chunk.js": "/school-bus-timetable/static/js/2.7a979c8d.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.c0c7ccf7.js",
     "static/js/2.7a979c8d.chunk.js",
     "static/css/main.5d3ece46.chunk.css",
-    "static/js/main.0ed94501.chunk.js"
+    "static/js/main.b0e5bbb2.chunk.js"
   ]
 }
