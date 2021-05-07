@@ -122,6 +122,18 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string,busSto
         , [])
 
     useEffect(() => {
+        // geolocation
+        // 経度、緯度を取得するコードです。
+        navigator.geolocation.getCurrentPosition(success, fail);
+
+        function success(pos : any):void {
+            console.log('緯度' + pos.coords.latitude, '経度' + pos.coords.longitude);
+        }
+
+        function fail(error : any) {
+            alert('位置情報の取得に失敗しました。エラーコード：' + error.code);
+        }
+
         axios
             .get<GasResponse>(`${gasGetBusTimetable}?direction=${props.direction}`)
             .then(res => setTimetableItems(res.data.values.map(slotToItem)))
