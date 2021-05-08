@@ -9,13 +9,13 @@ import {ExpandMore} from "@material-ui/icons";
 
 type Direction = "outward" | "homeward";
 
-type BusStop="千歳駅"|"南千歳駅"|"研究実験棟"|"本部棟"
+type BusStop = "千歳駅" | "南千歳駅" | "研究実験棟" | "本部棟"
 
-type BusStops={
-    start1:BusStop,
-    start2:BusStop,
-    start3:BusStop,
-    goal:BusStop
+type BusStops = {
+    start1: BusStop,
+    start2: BusStop,
+    start3: BusStop,
+    goal: BusStop
 }
 
 type TimetableSlot = {
@@ -78,32 +78,32 @@ const Remarks: React.FC<{ remarks: string }> = props => {
     )
 }
 
-const makeColumns: (busStops:BusStops)=>GridColDef[] = busStops => {
+const makeColumns: (busStops: BusStops) => GridColDef[] = busStops => {
     const valueFormatter = (params: GridValueFormatterParams) => {
         const date = params.value as Date | undefined;
         return date !== undefined ? `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}` : date;
     };
-    const shareSetting:GridColDef={
-        field:"",
-        flex: 2,valueFormatter,
+    const shareSetting: GridColDef = {
+        field: "",
+        flex: 2, valueFormatter,
         align: "center",
         headerAlign: "center",
-        sortable:false,disableColumnMenu:true,
+        sortable: false, disableColumnMenu: true,
     }
 
     const columns: GridColDef[] = [
         {headerName: "ID", field: "id", hide: true, type: "number"},
-        { ...shareSetting,headerName: `${busStops.start1}発`, field: "start"},
-        {...shareSetting,headerName: `${busStops.start2}発`, field: "via1", flex: 2},
-        {...shareSetting,headerName: `${busStops.start3}発`, field: "via2", flex: 2},
-        {...shareSetting,headerName: `${busStops.goal}着`, field: "goal", flex: 2},
+        {...shareSetting, headerName: `${busStops.start1}発`, field: "start"},
+        {...shareSetting, headerName: `${busStops.start2}発`, field: "via1", flex: 2},
+        {...shareSetting, headerName: `${busStops.start3}発`, field: "via2", flex: 2},
+        {...shareSetting, headerName: `${busStops.goal}着`, field: "goal", flex: 2},
         {
             ...shareSetting,
             headerName: "備考",
             field: "remarks",
             flex: 1,
             align: "center",
-            valueFormatter:undefined,
+            valueFormatter: undefined,
             renderCell: params => <Remarks remarks={params.value as string}/>
         }
     ]
@@ -111,7 +111,7 @@ const makeColumns: (busStops:BusStops)=>GridColDef[] = busStops => {
     return columns;
 };
 
-export const BusTimetable: React.FC<{ direction: Direction, busStop:BusStops }> = props => {
+export const BusTimetable: React.FC<{ direction: Direction, busStop: BusStops, position?:GeolocationPosition }> = props => {
     const [timetableItems, setTimetableItems] = useState<TimetableItem[]>([]);
 
     const slotToItem = useCallback((slot: TimetableSlot, id: number): TimetableItem => {
@@ -122,18 +122,6 @@ export const BusTimetable: React.FC<{ direction: Direction, busStop:BusStops }> 
         , [])
 
     useEffect(() => {
-        // geolocation
-        // 経度、緯度を取得するコードです。
-        navigator.geolocation.getCurrentPosition(success, fail);
-
-        function success(pos : any):void {
-            console.log('緯度' + pos.coords.latitude, '経度' + pos.coords.longitude);
-        }
-
-        function fail(error : any) {
-            alert('位置情報の取得に失敗しました。エラーコード：' + error.code);
-        }
-
         axios
             .get<GasResponse>(`${gasGetBusTimetable}?direction=${props.direction}`)
             .then(res => setTimetableItems(res.data.values.map(slotToItem)))
@@ -142,9 +130,9 @@ export const BusTimetable: React.FC<{ direction: Direction, busStop:BusStops }> 
 
     return (
         <div>
-            <Accordion style={{minWidth:"40rem"}}>
+            <Accordion style={{minWidth: "40rem"}}>
                 <AccordionSummary expandIcon={<ExpandMore/>}>
-                    <Typography style={{fontWeight:"bold"}}>{props.children}</Typography>
+                    <Typography style={{fontWeight: "bold"}}>{props.children}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <DataGrid rows={timetableItems} columns={makeColumns(props.busStop)} autoPageSize autoHeight/>
