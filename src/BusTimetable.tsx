@@ -3,7 +3,7 @@ import axios from "axios";
 import {DataGrid, GridColDef, GridValueFormatterParams} from "@material-ui/data-grid";
 import {
     Accordion, AccordionDetails, AccordionSummary,
-    Button, Dialog, makeStyles, Paper, Typography,
+    Button, Dialog, Paper, Typography,
 } from "@material-ui/core";
 import {ExpandMore} from "@material-ui/icons";
 
@@ -111,7 +111,7 @@ const makeColumns: (busStops:BusStops)=>GridColDef[] = busStops => {
     return columns;
 };
 
-export const BusTimetable: React.FC<{ direction: Direction, title: string,busStop:BusStops }> = props => {
+export const BusTimetable: React.FC<{ direction: Direction, busStop:BusStops }> = props => {
     const [timetableItems, setTimetableItems] = useState<TimetableItem[]>([]);
 
     const slotToItem = useCallback((slot: TimetableSlot, id: number): TimetableItem => {
@@ -122,6 +122,18 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string,busSto
         , [])
 
     useEffect(() => {
+        // geolocation
+        // 経度、緯度を取得するコードです。
+        navigator.geolocation.getCurrentPosition(success, fail);
+
+        function success(pos : any):void {
+            console.log('緯度' + pos.coords.latitude, '経度' + pos.coords.longitude);
+        }
+
+        function fail(error : any) {
+            alert('位置情報の取得に失敗しました。エラーコード：' + error.code);
+        }
+
         axios
             .get<GasResponse>(`${gasGetBusTimetable}?direction=${props.direction}`)
             .then(res => setTimetableItems(res.data.values.map(slotToItem)))
@@ -132,7 +144,7 @@ export const BusTimetable: React.FC<{ direction: Direction, title: string,busSto
         <div>
             <Accordion style={{minWidth:"40rem"}}>
                 <AccordionSummary expandIcon={<ExpandMore/>}>
-                    <Typography style={{fontWeight:"bold"}}>{props.title}</Typography>
+                    <Typography style={{fontWeight:"bold"}}>{props.children}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <DataGrid rows={timetableItems} columns={makeColumns(props.busStop)} autoPageSize autoHeight/>
