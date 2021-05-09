@@ -11,7 +11,10 @@ const App: React.FC = () => {
     // geolocation
     // 経度、緯度を取得するコードです。
     const success = (position: GeolocationPosition) => {
-      console.log('緯度' + position.coords.latitude, '経度' + position.coords.longitude);
+      console.log(
+        '緯度' + position.coords.latitude,
+        '経度' + position.coords.longitude
+      );
       setUserPosition(position);
     };
 
@@ -26,34 +29,32 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <body>
-        <BusTimetable
-          direction={'outward'}
-          busStop={{
-            start1: '千歳駅',
-            start2: '南千歳駅',
-            start3: '研究実験棟',
-            goal: '本部棟',
-          }}
-          position={userPosition}>
-          <div>
-            <TrainIcon /> <ArrowForwardIcon /> <SchoolIcon /> (行き)
-          </div>
-        </BusTimetable>
-        <BusTimetable
-          direction={'homeward'}
-          busStop={{
-            start1: '本部棟',
-            start2: '研究実験棟',
-            start3: '南千歳駅',
-            goal: '千歳駅',
-          }}
-          position={userPosition}>
-          <div>
-            <SchoolIcon /> <ArrowForwardIcon /> <TrainIcon /> (帰り)
-          </div>
-        </BusTimetable>
-      </body>
+      <BusTimetable
+        direction={'outward'}
+        busStop={{
+          start1: '千歳駅',
+          start2: '南千歳駅',
+          start3: '研究実験棟',
+          goal: '本部棟',
+        }}
+        position={userPosition}>
+        <div>
+          <TrainIcon /> <ArrowForwardIcon /> <SchoolIcon /> (行き)
+        </div>
+      </BusTimetable>
+      <BusTimetable
+        direction={'homeward'}
+        busStop={{
+          start1: '本部棟',
+          start2: '研究実験棟',
+          start3: '南千歳駅',
+          goal: '千歳駅',
+        }}
+        position={userPosition}>
+        <div>
+          <SchoolIcon /> <ArrowForwardIcon /> <TrainIcon /> (帰り)
+        </div>
+      </BusTimetable>
     </div>
   );
 };

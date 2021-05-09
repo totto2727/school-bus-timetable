@@ -177,10 +177,10 @@ export const BusTimetable: React.FC<{
   return (
     <div>
       <Accordion style={{ minWidth: '40rem' }}>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography style={{ fontWeight: 'bold' }}>
-            {props.children}
-          </Typography>
+        <AccordionSummary
+          expandIcon={<ExpandMore />}
+          style={{ fontWeight: 'bold' }}>
+          {props.children}
         </AccordionSummary>
         <AccordionDetails>
           <DataGrid
