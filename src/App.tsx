@@ -5,14 +5,14 @@ import SchoolIcon from '@material-ui/icons/School';
 import TrainIcon from '@material-ui/icons/Train';
 
 const App: React.FC = () => {
-  const [position, setPosition] = useState<GeolocationPosition>();
+  const [userPosition, setUserPosition] = useState<GeolocationPosition>();
 
-  const initializeLocation = useCallback(() => {
+  const initializeUserPosition = useCallback(() => {
     // geolocation
     // 経度、緯度を取得するコードです。
-    const success = (pos: GeolocationPosition) => {
-      console.log('緯度' + pos.coords.latitude, '経度' + pos.coords.longitude);
-      setPosition(pos);
+    const success = (position: GeolocationPosition) => {
+      console.log('緯度' + position.coords.latitude, '経度' + position.coords.longitude);
+      setUserPosition(position);
     };
 
     const fail = (error: GeolocationPositionError) => {
@@ -22,7 +22,7 @@ const App: React.FC = () => {
     navigator.geolocation.getCurrentPosition(success, fail);
   }, []);
 
-  useEffect(initializeLocation, [initializeLocation]);
+  useEffect(initializeUserPosition, [initializeUserPosition]);
 
   return (
     <div>
@@ -35,7 +35,7 @@ const App: React.FC = () => {
             start3: '研究実験棟',
             goal: '本部棟',
           }}
-          position={position}>
+          position={userPosition}>
           <div>
             <TrainIcon /> <ArrowForwardIcon /> <SchoolIcon /> (行き)
           </div>
@@ -48,7 +48,7 @@ const App: React.FC = () => {
             start3: '南千歳駅',
             goal: '千歳駅',
           }}
-          position={position}>
+          position={userPosition}>
           <div>
             <SchoolIcon /> <ArrowForwardIcon /> <TrainIcon /> (帰り)
           </div>
