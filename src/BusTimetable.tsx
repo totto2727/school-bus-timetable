@@ -16,10 +16,13 @@ import {
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 
+//行き帰りか
 type Direction = 'outward' | 'homeward';
 
+//バス停のある場所
 type BusStop = '千歳駅' | '南千歳駅' | '研究実験棟' | '本部棟';
 
+//移動順
 type BusStops = {
   start1: BusStop;
   start2: BusStop;
@@ -27,6 +30,7 @@ type BusStops = {
   goal: BusStop;
 };
 
+//テーブルの表示要素のみ
 type TimetableSlot = {
   start: string;
   via1: string;
@@ -35,6 +39,7 @@ type TimetableSlot = {
   remarks: string;
 };
 
+//テーブルのカラム
 type TimetableItem = {
   id: number;
   start?: Date;
@@ -44,13 +49,16 @@ type TimetableItem = {
   remarks: string;
 };
 
+//GASの返り値
 type GasResponse = {
   values: TimetableSlot[];
 };
 
+//GAS APIのURL
 const gasGetBusTimetable =
   'https://script.google.com/macros/s/AKfycbyFqCdqeo0DvFUJE8KCM3-6OzwckqNJGstPRtpppYbIu-JUmi_eUo_SkwpUmWhwlF4c/exec';
 
+//テーブルの備考欄のコンポーネント
 const Remarks: React.FC<{ remarks: string }> = (props) => {
   const [open, setOpen] = useState(false);
 
@@ -89,7 +97,9 @@ const Remarks: React.FC<{ remarks: string }> = (props) => {
   );
 };
 
+//DataGridの行の作成･設定
 const makeColumns: (busStops: BusStops) => GridColDef[] = (busStops) => {
+  //時刻表示を0詰め、もしくは空欄に変換
   const valueFormatter = (params: GridValueFormatterParams) => {
     const date = params.value as Date | undefined;
     return date !== undefined
@@ -100,6 +110,7 @@ const makeColumns: (busStops: BusStops) => GridColDef[] = (busStops) => {
       : date;
   };
 
+  //行の共通設定
   const shareSetting: GridColDef = {
     field: '',
     flex: 2,
@@ -110,6 +121,7 @@ const makeColumns: (busStops: BusStops) => GridColDef[] = (busStops) => {
     disableColumnMenu: true,
   };
 
+  //行の設定
   const columns: GridColDef[] = [
     { headerName: 'ID', field: 'id', hide: true, type: 'number' },
     { ...shareSetting, headerName: `${busStops.start1}発`, field: 'start' },
@@ -147,6 +159,7 @@ const makeColumns: (busStops: BusStops) => GridColDef[] = (busStops) => {
   return columns;
 };
 
+//時刻表本体、方向、バス停の移動順、ユーザの位置情報を引数とする
 export const BusTimetable: React.FC<{
   direction: Direction;
   busStop: BusStops;
@@ -154,11 +167,15 @@ export const BusTimetable: React.FC<{
 }> = (props) => {
   const [timetableItems, setTimetableItems] = useState<TimetableItem[]>([]);
 
+  //APIから取得したデータを編集
   const slotToItem = useCallback(
     (slot: TimetableSlot, id: number): TimetableItem => {
+      //文字列を日付型へ
       const stringToTime = (str: string) =>
         str !== '' ? new Date(str) : undefined;
+
       const { remarks, ...rest } = slot;
+
       return Object.assign(
         { remarks, id },
         ...Object.entries(rest).map((v) => ({ [v[0]]: stringToTime(v[1]) }))
@@ -167,6 +184,7 @@ export const BusTimetable: React.FC<{
     []
   );
 
+  //ページ描画後、GAS APIからデータ取得
   useEffect(() => {
     axios
       .get<GasResponse>(`${gasGetBusTimetable}?direction=${props.direction}`)
