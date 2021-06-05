@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   DataGrid,
+  GridCellClassParams,
   GridColDef,
   GridValueFormatterParams,
 } from '@material-ui/data-grid';
@@ -11,6 +12,7 @@ import {
   AccordionSummary,
   Button,
   Dialog,
+  makeStyles,
   Paper,
   Typography,
 } from '@material-ui/core';
@@ -45,8 +47,9 @@ type TimetableItem = {
   start?: Date;
   via1?: Date;
   via2?: Date;
-  goal?: Date;
+  goal: Date;
   remarks: string;
+  isEnable: boolean;
 };
 
 //GASの返り値
@@ -58,35 +61,55 @@ type GasResponse = {
 const gasGetBusTimetable =
   'https://script.google.com/macros/s/AKfycbyFqCdqeo0DvFUJE8KCM3-6OzwckqNJGstPRtpppYbIu-JUmi_eUo_SkwpUmWhwlF4c/exec';
 
+const useStyles = makeStyles((theme) => ({
+  remarksPaper: {
+    whiteSpace: 'pre-wrap',
+    minWidth: 300,
+    minHeight: 300,
+  },
+  remarksTypography: {
+    padding: '2rem',
+    fontSize: '2rem',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    lineHeight: '3rem',
+  },
+  root: {
+    '& .disable': {
+      opacity: 0.5,
+    },
+    '& .remarksPaper': {
+      whiteSpace: 'pre-wrap',
+      minWidth: 300,
+      minHeight: 300,
+    },
+    '& .remarksTypography': {
+      padding: '2rem',
+      fontSize: '2rem',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      lineHeight: '3rem',
+    },
+  },
+}));
+
 //テーブルの備考欄のコンポーネント
 const Remarks: React.FC<{ remarks: string }> = (props) => {
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
-
   const handleClickOpen = useCallback(() => setOpen(true), []);
-
   const handleClickClose = useCallback(() => setOpen(false), []);
 
   return props.remarks !== '' ? (
-    <div>
+    <div className={classes.root}>
       <Button variant={'contained'} color="primary" onClick={handleClickOpen}>
         備考
       </Button>
       <Dialog open={open} onClose={handleClickClose}>
-        <Paper
-          style={{
-            whiteSpace: 'pre-wrap',
-            minWidth: 300,
-            minHeight: 300,
-          }}>
-          <Typography
-            style={{
-              padding: '2rem',
-              fontSize: '2rem',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              lineHeight: '3rem',
-            }}>
+        <Paper className={classes.remarksPaper}>
+          <Typography className={classes.remarksTypography}>
             {props.remarks}
           </Typography>
         </Paper>
@@ -110,15 +133,27 @@ const makeColumns: (busStops: BusStops) => GridColDef[] = (busStops) => {
       : date;
   };
 
+  const checkEnable = (params: GridCellClassParams) => {
+    const date = params.value as Date;
+    const now = new Date();
+    return (
+      !date ||
+      date.getHours() > now.getHours() ||
+      (date.getHours() === now.getHours() &&
+        date.getMinutes() >= now.getMinutes())
+    );
+  };
+
   //行の共通設定
   const shareSetting: GridColDef = {
     field: '',
     flex: 2,
-    valueFormatter,
     align: 'center',
     headerAlign: 'center',
     sortable: false,
     disableColumnMenu: true,
+    valueFormatter,
+    cellClassName: (params) => (checkEnable(params) ? '' : 'disable'),
   };
 
   //行の設定
@@ -150,6 +185,7 @@ const makeColumns: (busStops: BusStops) => GridColDef[] = (busStops) => {
       flex: 1,
       align: 'center',
       valueFormatter: undefined,
+      cellClassName: undefined,
       renderCell: function RenderCell(params) {
         return <Remarks remarks={params.value as string} />;
       },
@@ -166,6 +202,7 @@ export const BusTimetable: React.FC<{
   position?: GeolocationPosition;
 }> = (props) => {
   const [timetableItems, setTimetableItems] = useState<TimetableItem[]>([]);
+  const classes = useStyles();
 
   //APIから取得したデータを編集
   const slotToItem = useCallback(
@@ -193,7 +230,7 @@ export const BusTimetable: React.FC<{
   }, [props.direction, slotToItem]);
 
   return (
-    <div>
+    <div className={classes.root}>
       <Accordion style={{ minWidth: '40rem' }}>
         <AccordionSummary
           expandIcon={<ExpandMore />}
