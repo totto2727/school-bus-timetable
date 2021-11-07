@@ -3,6 +3,7 @@ import { BusTimetable } from './BusTimetable';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import SchoolIcon from '@material-ui/icons/School';
 import TrainIcon from '@material-ui/icons/Train';
+import { Typography } from '@material-ui/core';
 
 const App: React.FC = () => {
   const [userPosition, setUserPosition] = useState<GeolocationPosition>();
@@ -32,27 +33,49 @@ const App: React.FC = () => {
       <BusTimetable
         direction={'outward'}
         busStop={{
-          start1: '千歳駅',
-          start2: '南千歳駅',
-          start3: '研究実験棟',
+          start: '千歳駅',
+          via1: '南千歳駅',
+          via2: '研究実験棟',
           goal: '本部棟',
         }}
         position={userPosition}>
         <div>
-          <TrainIcon /> <ArrowForwardIcon /> <SchoolIcon /> (行き)
+          <TrainIcon />
+          <ArrowForwardIcon />
+          <SchoolIcon />
+          <Typography
+            component={'span'}
+            variant={'body1'}
+            style={{
+              marginLeft: '1rem',
+              fontWeight: 'bold',
+              fontSize: '1.5rem',
+            }}>
+            行き
+          </Typography>
         </div>
       </BusTimetable>
       <BusTimetable
         direction={'homeward'}
         busStop={{
-          start1: '本部棟',
-          start2: '研究実験棟',
-          start3: '南千歳駅',
+          start: '本部棟',
+          via1: '研究実験棟',
+          via2: '南千歳駅',
           goal: '千歳駅',
         }}
         position={userPosition}>
         <div>
-          <SchoolIcon /> <ArrowForwardIcon /> <TrainIcon /> (帰り)
+          <SchoolIcon /> <ArrowForwardIcon /> <TrainIcon />{' '}
+          <Typography
+            component={'span'}
+            variant={'body1'}
+            style={{
+              marginLeft: '1rem',
+              fontWeight: 'bold',
+              fontSize: '1.5rem',
+            }}>
+            帰り
+          </Typography>
         </div>
       </BusTimetable>
     </div>
